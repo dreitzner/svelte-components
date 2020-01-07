@@ -1,3 +1,8 @@
+<!-- 
+    VALIDATION SUMMARY
+    - takes in an array of form errors with { id, errorMessage }
+    - focuses the first element
+ -->
 <script>
 import { afterUpdate } from 'svelte';
 export let validationSummaryData;
