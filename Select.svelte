@@ -1,10 +1,11 @@
 <!-- 
     Can be used like this
-    <Select bind:select={props}>
+    <Select
+        bind:value={value}
+        {...props}>
     where props = {
         id,
         name,
-        value,
         valid: null,
         options: [{
             id,
@@ -12,37 +13,43 @@
         },
         ...],
         errorMessage,
+        validation = {
+            validate: (ev) => { after on:change },
+        }
     }
  -->
 
 <script>
 import { fade } from 'svelte/transition';
 
-export let select;
+export let value;
 
-$: select.valid = !!select.value.length
-    || (select.valid === null
-        ? null
-        : select.valid);
+export let id;
+export let name;
+export let valid;
+export let options = [];
+export let errorMessage;
+export let validation;
 </script>
 
-<label for="{select.id}">{select.name}*</label>
+<label for="{id}">{name}*</label>
 <select
-    name="{select.id}"
-    id="{select.id}"
-    bind:value={select.value}
-    class:error={select.valid === false}
+    name="{id}"
+    id="{id}"
+    bind:value={value}
+    on:change={validation.validate}
+    class:error={valid === false}
     required>
-    <option value="" disabled selected>Choose {select.name}...</option>
-    {#each select.options as option}
+    <option value="" disabled selected>Choose {name}...</option>
+    {#each options as option}
         <option value={option.id}>
             {option.name}
         </option>
     {/each}
 </select>
-{#if select.valid === false}
-<label for="{select.id}" class="error" transition:fade>
-    {@html select.errorMessage}
+{#if valid === false}
+<label for="{id}" class="error" transition:fade>
+    {@html errorMessage}
 </label>
 {/if}
 

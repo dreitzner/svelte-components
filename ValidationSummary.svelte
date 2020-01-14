@@ -19,13 +19,13 @@ afterUpdate(() => {
     <div class="validationSummaryHeadline">The following errors occured:</div>
     {#each validationSummaryData as data}
     <li>
-        <a href="#{data.id}">{data.errorMessage}</a>
+        <a href="#{data.props.id}">{data.props.errorMessage}</a>
     </li>
     {/each}
 </ul>
 {/if}
 
-<style type="text/scss">
+<style>
 ul {
     border: 1px solid red;
     color: red;

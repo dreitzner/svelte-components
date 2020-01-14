@@ -1,51 +1,56 @@
 <!-- 
     Can be used like this
     <Input 
-        bind:input={props}
-        {validation}>
+        bind:value={value}
+        {...props}>
     where props = {
         id,
         name,
         optional,
         valid,
         errorMessage,
-    }
-    and where validation = {
-        validate: (ev) => { after blur },
-        validateKeyUp: (ev) => { after keyup, I used it only when valid === false for instant feedback },
-    }
+        validation = {
+            validate: (ev) => { after blur },
+            validateKeyUp: (ev) => { after keyup, I used it only when valid === false for instant feedback },
+        }
+    } 
  -->
 
 <script>
 import { fade } from 'svelte/transition';
 
-export let input;
-export let validation;
+export let value;
 
-const type = input.type || 'text';
+export let type = 'text';
+export let id;
+export let name;
+export let optional;
+export let valid;
+export let errorMessage;
+export let validation;
 
 const handleInput = (e) => {
     // in here, you can switch on type and implement
     // whatever behaviour you need
-    input.value = type.match(/^(number|range)$/)
+    value = type.match(/^(number|range)$/)
         ? +e.target.value
         : e.target.value;
 };
 </script>
 
-<label for="{input.id}">{input.name}{#if !input.optional}*{/if}</label>
+<label for="{id}">{name}{#if !optional}*{/if}</label>
 <input
     {type}
-    id={input.id}
-    placeholder={input.name}
+    id={id}
+    placeholder={name}
     on:input={handleInput}
     on:blur={validation.validate}
     on:keyup={validation.validateKeyUp}
-    class:error={input.valid === false}
+    class:error={valid === false}
     required>
-{#if input.valid === false && !input.optional}
-<label for={input.id} class="error" transition:fade>
-    {@html input.errorMessage}
+{#if valid === false && !optional}
+<label for={id} class="error" transition:fade>
+    {@html errorMessage}
 </label>
 {/if}
 
@@ -58,5 +63,8 @@ input {
     font-size: 14px;
     padding: 10px;
     width: 100%;
+}
+label.error{
+    margin-top: -20px;
 }
 </style>
